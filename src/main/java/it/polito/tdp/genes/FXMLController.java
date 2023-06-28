@@ -5,6 +5,8 @@
 package it.polito.tdp.genes;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.genes.model.Model;
@@ -38,12 +40,42 @@ public class FXMLController {
 
     @FXML
     void doContaArchi(ActionEvent event) {
-
+    	this.model.creaGrafo();
+    	this.txtResult.setText("Grafo creato!\n");
+    	this.txtResult.appendText("# archi: " + this.model.getGrafo().vertexSet().size() +"\n");
+    	this.txtResult.appendText("# vertici: " + this.model.getGrafo().edgeSet().size()+"\n");
+    	this.txtResult.appendText("\n\n ");
+    	this.txtResult.appendText("Peso minimo: " + this.model.getPesoMinimo() + "\n");
+    	this.txtResult.appendText("Peso massimo: " + this.model.getPesoMassimo());
+    
+    	this.txtResult.appendText("\n\n ");
+    	try {
+    		double soglia = Double.parseDouble(this.txtSoglia.getText());
+    		
+    		this.txtResult.appendText("# archi sopra la soglia: " + this.model.getArchiSopraSoglia(soglia)+"\n");
+        	this.txtResult.appendText("# archi sotto la soglia: " + this.model.getArchiSottoSoglia(soglia)+"\n");
+    	} catch(NumberFormatException e) {
+    		this.txtResult.setText("ERRORE: la soglia deve essere un numero decimale. ");
+    	}
+    	
+    
+    
     }
 
     @FXML
     void doRicerca(ActionEvent event) {
-
+    	try {
+    		double soglia = Double.parseDouble(this.txtSoglia.getText());
+    		List<Integer> cammino = new ArrayList<Integer>(this.model.ricercaCammino(soglia));
+    		
+    		for (Integer i : cammino) {
+    			this.txtResult.appendText(""+ i + "\n");
+    		}
+    		
+    	} catch(NumberFormatException e) {
+    		this.txtResult.setText("ERRORE: la soglia deve essere un numero decimale. ");
+    	}
+    	
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
